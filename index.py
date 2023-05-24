@@ -1,17 +1,17 @@
 from biblioteca import (
     mostrar_nombre_formateado,
     leer_json,
+    mostrar_estadisticas_jugador,
+    validador,
 )
-import re
-
 
 jugadores = leer_json("tp_parcial/dt.json")
 
 
 def aplicacion_nba():
     while True:
-        opcion = input("Eliga la opción deseada (0-20): ")
-        if re.match(r"[0-9]{1,2}$", opcion) and int(opcion) <= len(jugadores):
+        opcion = input("Elija la opción deseada (0-20): ")
+        if validador(r"[0-9]{1,2}$", opcion) and int(opcion) <= len(jugadores):
             opcion = int(opcion)
             match opcion:
                 case 0:
@@ -19,7 +19,7 @@ def aplicacion_nba():
                 case 1:
                     mostrar_nombre_formateado(jugadores)
                 case 2:
-                    pass
+                    mostrar_estadisticas_jugador(jugadores)
                 case 3:
                     pass
                 case 4:
