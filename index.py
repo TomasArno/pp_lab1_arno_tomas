@@ -3,25 +3,42 @@ from biblioteca import (
     leer_json,
     mostrar_estadisticas_jugador,
     validador,
+    guardar_csv,
+    limpiar_consola,
+    imprimir_mensaje,
 )
 
-jugadores = leer_json("tp_parcial/dt.json")
+jugadores = leer_json("./dt.json")
 
 
 def aplicacion_nba():
+    ingresos = []
     while True:
         opcion = input("Elija la opción deseada (0-20): ")
         if validador(r"[0-9]{1,2}$", opcion) and int(opcion) <= len(jugadores):
             opcion = int(opcion)
+            ingresos.append(opcion)
             match opcion:
                 case 0:
                     break
                 case 1:
-                    mostrar_nombre_formateado(jugadores)
+                    for jugador in mostrar_nombre_formateado(jugadores):
+                        imprimir_mensaje(jugador, "Info")
+                    limpiar_consola()
                 case 2:
-                    mostrar_estadisticas_jugador(jugadores)
+                    estadisticas_jugador = mostrar_estadisticas_jugador(jugadores)
                 case 3:
-                    pass
+                    if 2 in ingresos:
+                        guardar_csv("data.csv", estadisticas_jugador)
+                        imprimir_mensaje(
+                            "Archivo 'data.csv' guardado satisfactoriamente!",
+                            "Success",
+                        )
+                    else:
+                        imprimir_mensaje(
+                            "Por favor, primero solicite las estadisticas de algún jugador",
+                            "Error",
+                        )
                 case 4:
                     pass
                 case 5:
@@ -56,9 +73,8 @@ def aplicacion_nba():
                     pass
                 case 20:
                     pass
-
         else:
-            print("Opción inválida")
+            imprimir_mensaje("Opción inválida", "Error")
 
 
 aplicacion_nba()
