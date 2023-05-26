@@ -6,6 +6,7 @@ from biblioteca import (
     guardar_csv,
     limpiar_consola,
     imprimir_mensaje,
+    buscar_mostrar_logros,
 )
 
 jugadores = leer_json("./dt.json")
@@ -15,7 +16,7 @@ def aplicacion_nba():
     ingresos = []
     while True:
         opcion = input("Elija la opción deseada (0-20): ")
-        if validador(r"[0-9]{1,2}$", opcion) and int(opcion) <= len(jugadores):
+        if validador(r"^[0-9]{1,2}$", opcion) and int(opcion) <= len(jugadores):
             opcion = int(opcion)
             ingresos.append(opcion)
             match opcion:
@@ -40,7 +41,7 @@ def aplicacion_nba():
                             "Error",
                         )
                 case 4:
-                    pass
+                    buscar_mostrar_logros(jugadores)
                 case 5:
                     pass
                 case 6:

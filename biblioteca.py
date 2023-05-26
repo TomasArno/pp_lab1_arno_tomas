@@ -37,6 +37,20 @@ def limpiar_consola() -> None:
         os.system("clear")
 
 
+def validador(patron: str, opcion_evaluar: str) -> bool:
+    """
+    Esta función se encarga de validar con REgex un determinado patron proveído por el usuario.
+    :param patron: Str que contiene el patron a analizar sobre el texto.
+    :param opcion_evaluar: Str que contiene el texto a ser analizado.
+
+    return: Bool indicando si pasó o no la validación
+    """
+    if re.search(patron, opcion_evaluar):
+        return True
+    else:
+        return False
+
+
 def leer_json(nombre_archivo: str) -> list[dict]:
     """
     Esta función lee el archivo JSON indicado por parámetro y devuelve el contenido de la key "jugadores"
@@ -76,20 +90,6 @@ def guardar_csv(nombre_archivo: str, data: dict) -> None:
             imprimir_mensaje("La data a guardar no debe ser vacía", "Error")
 
 
-def validador(patron: str, opcion_evaluar: str) -> bool:
-    """
-    Esta función se encarga de validar con REgex un determinado patron proveído por el usuario.
-    :param patron: Str que contiene el patron a analizar sobre el texto.
-    :param opcion_evaluar: Str que contiene el texto a ser analizado.
-
-    return: Bool indicando si pasó o no la validación
-    """
-    if re.match(patron, opcion_evaluar):
-        return True
-    else:
-        return False
-
-
 def mostrar_nombre_formateado(jugadores: list[dict]) -> list:
     """
     Esta función recorre todos los jugadores y retorna los nombres de los mismos formateados
@@ -126,7 +126,7 @@ def mostrar_estadisticas_jugador(jugadores: list[dict]) -> dict:
         contador += 1
 
     indice = input("Ingrese el indice del jugador a buscar: ")
-    validado = validador(r"[0-9]{1,2}$", indice)
+    validado = validador(r"^[0-9]{1,2}$", indice)
 
     if validado and int(indice) <= len(jugadores):
         indice = int(indice)
@@ -139,3 +139,17 @@ def mostrar_estadisticas_jugador(jugadores: list[dict]) -> dict:
 
     else:
         imprimir_mensaje("Dato ingresado inválido", "Error")
+
+
+def buscar_mostrar_logros(jugadores: list[dict]):
+    """ """
+    mostrar_nombre_formateado(jugadores)
+    nombre_jugador = input(
+        "Ingrese el nombre del jugador que quiere ver sus logros: "
+    ).lower()
+
+    for jugador in jugadores:
+        if validador(rf"{nombre_jugador}", jugador["nombre"].lower()):
+            imprimir_mensaje(jugador["nombre"], "Success")
+            for logro in jugador["logros"]:
+                print(logro)
