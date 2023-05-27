@@ -8,6 +8,7 @@ from biblioteca import (
     imprimir_mensaje,
     buscar_mostrar_logros,
     calcula_promedio_puntos_equipo,
+    pertenece_salon_fama,
 )
 
 jugadores = leer_json("./dt.json")
@@ -24,11 +25,12 @@ def aplicacion_nba():
                 case 0:
                     break
                 case 1:
-                    for jugador in mostrar_nombre_formateado(jugadores):
-                        imprimir_mensaje(jugador, "Info")
+                    for jugador in jugadores:
+                        imprimir_mensaje(mostrar_nombre_formateado(jugador), "Info")
                     limpiar_consola()
                 case 2:
                     estadisticas_jugador = mostrar_estadisticas_jugador(jugadores)
+                    limpiar_consola()
                 case 3:
                     if 2 in ingresos:
                         guardar_csv("data.csv", estadisticas_jugador)
@@ -41,40 +43,49 @@ def aplicacion_nba():
                             "Por favor, primero solicite las estadisticas de algún jugador",
                             "Error",
                         )
+                        limpiar_consola()
                 case 4:
-                    buscar_mostrar_logros(jugadores)
+                    jugador_buscado = buscar_mostrar_logros(jugadores)
+                    if jugador_buscado != -1:
+                        for jugador in jugador_buscado:
+                            imprimir_mensaje(f"{jugador['nombre']}", "Success")
+                            for logro in jugador["logros"]:
+                                imprimir_mensaje(logro, "Info")
+                    limpiar_consola()
                 case 5:
                     calcula_promedio_puntos_equipo(jugadores)
+                    limpiar_consola()
                 case 6:
-                    pass
+                    pertenece_salon_fama(jugadores)
+                    limpiar_consola()
                 case 7:
-                    pass
+                    limpiar_consola()
                 case 8:
-                    pass
+                    limpiar_consola()
                 case 9:
-                    pass
+                    limpiar_consola()
                 case 10:
-                    pass
+                    limpiar_consola()
                 case 11:
-                    pass
+                    limpiar_consola()
                 case 12:
-                    pass
+                    limpiar_consola()
                 case 13:
-                    pass
+                    limpiar_consola()
                 case 14:
-                    pass
+                    limpiar_consola()
                 case 15:
-                    pass
+                    limpiar_consola()
                 case 16:
-                    pass
+                    limpiar_consola()
                 case 17:
-                    pass
+                    limpiar_consola()
                 case 18:
-                    pass
+                    limpiar_consola()
                 case 19:
-                    pass
+                    limpiar_consola()
                 case 20:
-                    pass
+                    limpiar_consola()
         else:
             imprimir_mensaje("Opción inválida", "Error")
 

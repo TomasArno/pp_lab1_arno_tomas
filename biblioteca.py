@@ -110,24 +110,15 @@ def guardar_csv(nombre_archivo: str, data: dict) -> None:
             imprimir_mensaje("La data a guardar no debe ser vacía", "Error")
 
 
-def mostrar_nombre_formateado(jugadores: list[dict]) -> list:
+def mostrar_nombre_formateado(jugador: dict):
     """
-    Esta función recorre todos los jugadores y retorna los nombres de los mismos formateados
+    Esta función imprime el nombre del jugador formateado
 
-    :param jugadores: Lista de diccionarios que contiene los datos de todos los jugadores
-    return: List con cada uno de los nombres formateados
+    :param jugador: diccionario que contiene los datos de un jugador
+    return: None
     """
-    if jugadores:
-        lista_jugadores_format = []
-        for jugador in jugadores:
-            if jugador:
-                lista_jugadores_format.append(
-                    f"{jugador['nombre']} - {jugador['posicion']}"
-                )
-            else:
-                imprimir_mensaje(f"{jugador['nombre']} está vacío", "Error")
-
-        return lista_jugadores_format
+    if jugador:
+        return f'{jugador["nombre"]} - {jugador["posicion"]}'
     else:
         imprimir_mensaje("Elemento vacío", "Error")
 
@@ -141,8 +132,8 @@ def mostrar_estadisticas_jugador(jugadores: list[dict]) -> dict:
     """
 
     contador = 0
-    for nombre in mostrar_nombre_formateado(jugadores):
-        imprimir_mensaje(f"#{contador} | {nombre}", "Info")
+    for jugador in jugadores:
+        imprimir_mensaje(f"#{contador} | {mostrar_nombre_formateado(jugador)}", "Info")
         contador += 1
 
     indice = input("Ingrese el indice del jugador a buscar: ")
@@ -162,32 +153,30 @@ def mostrar_estadisticas_jugador(jugadores: list[dict]) -> dict:
         imprimir_mensaje("Dato ingresado inválido", "Error")
 
 
-def buscar_mostrar_logros(jugadores: list[dict]) -> None:
+def buscar_mostrar_logros(jugadores: list[dict]) -> list[dict]:
     """
-    Esta función solicita al usuario ingresar el nombre de algun jugador e imprimirá todos sus logros.
+    Esta función busca todos los logros del jugador indicado.
 
     :param jugadores: Lista de diccionarios que contiene los datos de todos los jugadores.
-    return: None
+    return: lista de diccionarios que contiene los datos del jugador deseado
     """
-
-    for nombre in mostrar_nombre_formateado(jugadores):
-        imprimir_mensaje(nombre, "Info")
-
+    bandera_entro = False
+    lista_jugadores_buscados = []
+    for jugador in jugadores:
+        imprimir_mensaje(mostrar_nombre_formateado(jugador), "Info")
     nombre_jugador = input(
         "Ingrese el nombre del jugador que quiere ver sus logros: "
     ).lower()
-    bandera_entro = False
-
     for jugador in jugadores:
-        if validador(rf"^{nombre_jugador}", jugador["nombre"].lower()):
+        if jugador and validador(rf"^{nombre_jugador}", jugador["nombre"].lower()):
             bandera_entro = True
-            imprimir_mensaje(f"{jugador['nombre']}", "Success")
+            lista_jugadores_buscados.append(jugador)
 
-            for logro in jugador["logros"]:
-                imprimir_mensaje(logro, "Info")
-
-    if not bandera_entro:
+    if bandera_entro:
+        return lista_jugadores_buscados
+    else:
         imprimir_mensaje("Ingrese un nombre valido", "Error")
+        return -1
 
 
 def calcula_promedio_puntos_equipo(jugadores: list[dict]) -> None:
@@ -217,3 +206,27 @@ def calcula_promedio_puntos_equipo(jugadores: list[dict]) -> None:
             f"{nombre_jugador}: promedio puntos por partido -> {jugador['estadisticas']['promedio_puntos_por_partido']}",
             "Info",
         )
+
+
+def pertenece_salon_fama(jugadores: list[dict]) -> None:
+    """
+    Esta funcion muestra por consola si el jugador indicado pertenece al salon de la fama o no
+
+    :param jugadores: Lista de diccionarios que contiene los datos de todos los jugadores.
+    return: None
+    """
+    bandera_entro = False
+    jugadores_buscados = buscar_mostrar_logros(jugadores)
+    if jugadores_buscados != -1:
+        for jugador in jugadores_buscados:
+            for logro in jugador["logros"]:
+                if validador(rf"^miembro", logro.lower()):
+                    bandera_entro = True
+                    imprimir_mensaje(
+                        f"{jugador['nombre']} Pertenece al salon de la fama del baloncesto",
+                        "Success",
+                    )
+        if not bandera_entro:
+            imprimir_mensaje(
+                "El jugador NO pertenece al salon de la fama del baloncesto", "Error"
+            )
