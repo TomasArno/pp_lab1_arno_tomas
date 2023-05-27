@@ -21,7 +21,7 @@ def imprimir_mensaje(mensaje: str, tipo_mensaje: str) -> None:
         case "Error":
             print(f"{_b_red}{_f_white}> Error: {mensaje}{_no_color}")
         case "Success":
-            print(f"{_b_green}{_f_white}> Success: {mensaje}{_no_color}")
+            print(f"{_b_green}{_f_white}> {mensaje}{_no_color}")
         case "Info":
             print(f"{_b_blue}{_f_white}> {mensaje}{_no_color}")
 
@@ -49,6 +49,26 @@ def validador(patron: str, opcion_evaluar: str) -> bool:
         return True
     else:
         return False
+
+
+def ordenar_lista(lista, orden: bool) -> list:
+    flag_swap = True
+    while flag_swap:
+        flag_swap = False
+        for rango_a in range(len(lista) - 1):
+            if (
+                orden
+                and lista[rango_a] > lista[rango_a + 1]
+                or not orden
+                and lista[rango_a] < lista[rango_a + 1]
+            ):
+                lista[rango_a], lista[rango_a + 1] = (
+                    lista[rango_a + 1],
+                    lista[rango_a],
+                )
+                flag_swap = True
+
+    return lista
 
 
 def leer_json(nombre_archivo: str) -> list[dict]:
@@ -119,10 +139,10 @@ def mostrar_estadisticas_jugador(jugadores: list[dict]) -> dict:
     :param jugadores: Lista de diccionarios que contiene los datos de todos los jugadores
     return: Dict que contiene la data del jugador elegido.
     """
-    lista_jugadores_format = mostrar_nombre_formateado(jugadores)
+
     contador = 0
-    for jugador in lista_jugadores_format:
-        imprimir_mensaje(f"#{contador} | {jugador}", "Info")
+    for nombre in mostrar_nombre_formateado(jugadores):
+        imprimir_mensaje(f"#{contador} | {nombre}", "Info")
         contador += 1
 
     indice = input("Ingrese el indice del jugador a buscar: ")
@@ -130,26 +150,70 @@ def mostrar_estadisticas_jugador(jugadores: list[dict]) -> dict:
 
     if validado and int(indice) <= len(jugadores):
         indice = int(indice)
+        imprimir_mensaje(f"#{contador} | {jugadores[indice]['nombre']}:", "Success")
+
         for key in jugadores[indice]["estadisticas"]:
             imprimir_mensaje(
                 f"{key.lower().capitalize()}: {jugadores[indice]['estadisticas'][key]}",
                 "Info",
             )
         return jugadores[indice]
-
     else:
         imprimir_mensaje("Dato ingresado inválido", "Error")
 
 
-def buscar_mostrar_logros(jugadores: list[dict]):
-    """ """
-    mostrar_nombre_formateado(jugadores)
+def buscar_mostrar_logros(jugadores: list[dict]) -> None:
+    """
+    Esta función solicita al usuario ingresar el nombre de algun jugador e imprimirá todos sus logros.
+
+    :param jugadores: Lista de diccionarios que contiene los datos de todos los jugadores.
+    return: None
+    """
+
+    for nombre in mostrar_nombre_formateado(jugadores):
+        imprimir_mensaje(nombre, "Info")
+
     nombre_jugador = input(
         "Ingrese el nombre del jugador que quiere ver sus logros: "
     ).lower()
+    bandera_entro = False
 
     for jugador in jugadores:
-        if validador(rf"{nombre_jugador}", jugador["nombre"].lower()):
-            imprimir_mensaje(jugador["nombre"], "Success")
+        if validador(rf"^{nombre_jugador}", jugador["nombre"].lower()):
+            bandera_entro = True
+            imprimir_mensaje(f"{jugador['nombre']}", "Success")
+
             for logro in jugador["logros"]:
-                print(logro)
+                imprimir_mensaje(logro, "Info")
+
+    if not bandera_entro:
+        imprimir_mensaje("Ingrese un nombre valido", "Error")
+
+
+def calcula_promedio_puntos_equipo(jugadores: list[dict]) -> None:
+    """
+    Esta función calcula y muestra el promedio de puntos por partido de todo el equipo del Dream Team, ordenado por nombre de manera ascendente.
+
+    :param jugadores: Lista de diccionarios que contiene los datos de todos los jugadores.
+    """
+    acumulador_puntos = 0
+    contador_jugadores = 0
+    jugadores_validados = []
+
+    for jugador in jugadores:
+        if jugador:
+            acumulador_puntos += jugador["estadisticas"]["promedio_puntos_por_partido"]
+            contador_jugadores += 1
+            jugadores_validados.append(jugador["nombre"])
+    jugadores_ordenados = ordenar_lista(jugadores_validados, True)
+
+    imprimir_mensaje(
+        f"El promedio de puntos total del equipo es de: {int(acumulador_puntos / contador_jugadores)}",
+        "Success",
+    )
+
+    for nombre_jugador in jugadores_ordenados:
+        imprimir_mensaje(
+            f"{nombre_jugador}: promedio puntos por partido -> {jugador['estadisticas']['promedio_puntos_por_partido']}",
+            "Info",
+        )

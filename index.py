@@ -7,6 +7,7 @@ from biblioteca import (
     limpiar_consola,
     imprimir_mensaje,
     buscar_mostrar_logros,
+    calcula_promedio_puntos_equipo,
 )
 
 jugadores = leer_json("./dt.json")
@@ -43,7 +44,7 @@ def aplicacion_nba():
                 case 4:
                     buscar_mostrar_logros(jugadores)
                 case 5:
-                    pass
+                    calcula_promedio_puntos_equipo(jugadores)
                 case 6:
                     pass
                 case 7:
