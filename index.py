@@ -85,6 +85,9 @@ def aplicacion_nba():
                     calcular_max_segun_valor(jugadores, "promedio_rebotes_por_partido")
                     limpiar_consola()
                 case 12:
+                    calcular_max_segun_valor(
+                        jugadores, "promedio_asistencias_por_partido"
+                    )
                     limpiar_consola()
                 case 13:
                     limpiar_consola()
