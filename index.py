@@ -120,7 +120,7 @@ def aplicacion_nba():
                         )[:-1]
                     ):
                         imprimir_mensaje(
-                            f"{jugador_ordenado['nombre']}: promedio puntos por partido -> {jugador_ordenado['estadisticas']['promedio_puntos_por_partido']}",
+                            f"{mostrar_nombre_formateado(jugador_ordenado)}: promedio puntos por partido -> {jugador_ordenado['estadisticas']['promedio_puntos_por_partido']}",
                             "Info",
                         )
 
@@ -132,6 +132,7 @@ def aplicacion_nba():
                     )
                     limpiar_consola()
                 case 18:
+                    calcular_max_segun_valor(jugadores, "porcentaje_tiros_triples")
                     limpiar_consola()
                 case 19:
                     limpiar_consola()
