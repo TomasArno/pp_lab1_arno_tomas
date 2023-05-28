@@ -61,11 +61,15 @@ def aplicacion_nba():
                     limpiar_consola()
                 case 7:
                     imprimir_mensaje(
-                        f"El jugador con mas cantidad de puntos totales es: {mostrar_nombre_formateado(ordenar_lista(jugadores,True,'puntos_totales','estadisticas')[0])}",
+                        f"El jugador con mas cantidad de puntos totales es: {mostrar_nombre_formateado(ordenar_lista(jugadores,False,'puntos_totales','estadisticas')[0])}",
                         "Info",
                     )
                     limpiar_consola()
                 case 8:
+                    imprimir_mensaje(
+                        f"El jugador con el mayor porcentaje de tiros de campo es: {mostrar_nombre_formateado(ordenar_lista(jugadores,False,'porcentaje_tiros_de_campo','estadisticas')[0])}",
+                        "Info",
+                    )
                     limpiar_consola()
                 case 9:
                     limpiar_consola()
