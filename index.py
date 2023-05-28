@@ -56,7 +56,7 @@ def aplicacion_nba():
                     limpiar_consola()
                 case 5:
                     for jugador_ordenado in ordenar_lista(
-                        calcula_promedio_puntos_equipo(jugadores), True, "nombre"
+                        calcula_promedio_puntos_equipo(jugadores), True, "nombre", ""
                     ):
                         imprimir_mensaje(
                             f"{jugador_ordenado['nombre']}: promedio puntos por partido -> {jugador_ordenado['estadisticas']['promedio_puntos_por_partido']}",
@@ -68,19 +68,19 @@ def aplicacion_nba():
                     limpiar_consola()
                 case 7:
                     imprimir_mensaje(
-                        f"El jugador con mas cantidad de puntos totales es: {mostrar_nombre_formateado(ordenar_lista(jugadores,False,'puntos_totales','estadisticas')[0])}",
+                        f"El jugador con mas cantidad de puntos totales es: {mostrar_nombre_formateado(ordenar_lista(jugadores,False,'puntos_totales',{})[0])}",
                         "Info",
                     )
                     limpiar_consola()
                 case 8:
                     imprimir_mensaje(
-                        f"El jugador con el mayor porcentaje de tiros de campo es: {mostrar_nombre_formateado(ordenar_lista(jugadores,False,'porcentaje_tiros_de_campo','estadisticas')[0])}",
+                        f"El jugador con el mayor porcentaje de tiros de campo es: {mostrar_nombre_formateado(ordenar_lista(jugadores,False,'porcentaje_tiros_de_campo',{})[0])}",
                         "Info",
                     )
                     limpiar_consola()
                 case 9:
                     imprimir_mensaje(
-                        f"El jugador con la mayor cantidad de asistencias totales es: {mostrar_nombre_formateado(ordenar_lista(jugadores,False,'asistencias_totales','estadisticas')[0])}",
+                        f"El jugador con la mayor cantidad de asistencias totales es: {mostrar_nombre_formateado(ordenar_lista(jugadores,False,'asistencias_totales',{})[0])}",
                         "Info",
                     )
                     limpiar_consola()
@@ -97,13 +97,13 @@ def aplicacion_nba():
                     limpiar_consola()
                 case 13:
                     imprimir_mensaje(
-                        f"El jugador con la mayor cantidad de robos totales es: {mostrar_nombre_formateado(ordenar_lista(jugadores,False,'robos_totales','estadisticas')[0])}",
+                        f"El jugador con la mayor cantidad de robos totales es: {mostrar_nombre_formateado(ordenar_lista(jugadores,False,'robos_totales',{})[0])}",
                         "Info",
                     )
                     limpiar_consola()
                 case 14:
                     imprimir_mensaje(
-                        f"El jugador con la mayor cantidad de bloqueos totales es: {mostrar_nombre_formateado(ordenar_lista(jugadores,False,'bloqueos_totales','estadisticas')[0])}",
+                        f"El jugador con la mayor cantidad de bloqueos totales es: {mostrar_nombre_formateado(ordenar_lista(jugadores,False,'bloqueos_totales',{})[0])}",
                         "Info",
                     )
                     limpiar_consola()
@@ -116,7 +116,7 @@ def aplicacion_nba():
                             jugadores,
                             False,
                             "promedio_puntos_por_partido",
-                            "estadisticas",
+                            {},
                         )[:-1]
                     ):
                         imprimir_mensaje(
@@ -126,6 +126,10 @@ def aplicacion_nba():
 
                     limpiar_consola()
                 case 17:
+                    imprimir_mensaje(
+                        f"El jugador con la mayor cantidad de logros obtenidos es: {mostrar_nombre_formateado(ordenar_lista(jugadores,False,'logros',[])[0])}",
+                        "Info",
+                    )
                     limpiar_consola()
                 case 18:
                     limpiar_consola()

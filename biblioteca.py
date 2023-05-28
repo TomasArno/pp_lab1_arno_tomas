@@ -51,15 +51,51 @@ def validador(patron: str, opcion_evaluar: str) -> bool:
         return False
 
 
-def ordenar_lista(
-    jugadores: list[dict], orden: bool, atributo: str, estadisticas: str = None
-) -> list[dict]:
+def ordenar_lista(lista: list, orden: bool, key: str) -> list:
     """
     Esta funcion ordena de manera Ascendente o Descendente una lista de jugadores
     :param jugadores: Lista de diccionarios que contiene los datos de todos los jugadores
     :param orden: Boolean que indica el modo de ordenamiento (True asc - False desc)
     :param atributo: string que representa la key a iterar
     :param estadisticas: string opcional que representa una key que solo se va a usar en caso que se quiera iterar las estadisticas
+    return: lista de diccionarios que contiene los jugadores ordenados según el criterio indicado
+    """
+
+    # lista_jugadores = lista[:]
+    # if lista_jugadores:
+    #     flag_swap = True
+    #     while flag_swap:
+    #         flag_swap = False
+    #         for rango_a in range(len(lista_jugadores) - 1):
+    #             if (
+    #                 orden
+    #                 and lista_jugadores[rango_a][key]
+    #                 > lista_jugadores[rango_a + 1][key]
+    #                 or not orden
+    #                 and lista_jugadores[rango_a][key]
+    #                 < lista_jugadores[rango_a + 1][key]
+    #             ):
+    #                 lista_jugadores[rango_a], lista_jugadores[rango_a + 1] = (
+    #                     lista_jugadores[rango_a + 1],
+    #                     lista_jugadores[rango_a],
+    #                 )
+    #                 flag_swap = True
+
+    #     return lista_jugadores
+    # else:
+    #     imprimir_mensaje("Elemento vacío", "Error")
+
+
+def ordenar_lista(
+    jugadores: list[dict], orden: bool, atributo: str, estadisticas: list | dict | str
+) -> list[dict]:
+    """
+    Esta funcion ordena de manera Ascendente o Descendente los datos deseados de la lista de jugadores
+
+    :param jugadores: Lista de diccionarios que contiene los datos de todos los jugadores
+    :param orden: Boolean que indica el modo de ordenamiento (True asc - False desc)
+    :param atributo: string que representa la key a iterar
+    :param estadisticas: representa el tipo de dato que se va a querer iterar
     return: lista de diccionarios que contiene los jugadores ordenados según el criterio indicado
     """
 
@@ -70,23 +106,36 @@ def ordenar_lista(
             flag_swap = False
             for rango_a in range(len(lista_jugadores) - 1):
                 if (
-                    orden
-                    and estadisticas
-                    and lista_jugadores[rango_a][estadisticas][atributo]
-                    > lista_jugadores[rango_a + 1][estadisticas][atributo]
-                    or not orden
-                    and estadisticas
-                    and lista_jugadores[rango_a][estadisticas][atributo]
-                    < lista_jugadores[rango_a + 1][estadisticas][atributo]
-                ) or (
-                    orden
-                    and not estadisticas
-                    and lista_jugadores[rango_a][atributo]
-                    > lista_jugadores[rango_a + 1][atributo]
-                    or not orden
-                    and not estadisticas
-                    and lista_jugadores[rango_a][atributo]
-                    < lista_jugadores[rango_a + 1][atributo]
+                    (
+                        orden
+                        and type(estadisticas) is dict
+                        and lista_jugadores[rango_a]["estadisticas"][atributo]
+                        > lista_jugadores[rango_a + 1]["estadisticas"][atributo]
+                        or not orden
+                        and type(estadisticas) is dict
+                        and lista_jugadores[rango_a]["estadisticas"][atributo]
+                        < lista_jugadores[rango_a + 1]["estadisticas"][atributo]
+                    )
+                    or (
+                        orden
+                        and type(estadisticas) is str
+                        and lista_jugadores[rango_a][atributo]
+                        > lista_jugadores[rango_a + 1][atributo]
+                        or not orden
+                        and type(estadisticas) is str
+                        and lista_jugadores[rango_a][atributo]
+                        < lista_jugadores[rango_a + 1][atributo]
+                    )
+                    or (
+                        orden
+                        and type(estadisticas) is list
+                        and len(lista_jugadores[rango_a][atributo])
+                        > len(lista_jugadores[rango_a + 1][atributo])
+                        or not orden
+                        and type(estadisticas) is list
+                        and len(lista_jugadores[rango_a][atributo])
+                        < len(lista_jugadores[rango_a + 1][atributo])
+                    )
                 ):
                     lista_jugadores[rango_a], lista_jugadores[rango_a + 1] = (
                         lista_jugadores[rango_a + 1],
@@ -222,9 +271,9 @@ def calcula_promedio_puntos_equipo(jugadores: list[dict]) -> list[dict]:
     if jugadores:
         for jugador in jugadores:
             if jugador:
-                acumulador_puntos += jugador["estadisticas"][
-                    "promedio_puntos_por_partido"
-                ]
+                acumulador_puntos += int(
+                    jugador["estadisticas"]["promedio_puntos_por_partido"]
+                )
                 contador_jugadores += 1
                 jugadores_validados.append(jugador)
 
