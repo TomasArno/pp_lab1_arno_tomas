@@ -72,6 +72,10 @@ def aplicacion_nba():
                     )
                     limpiar_consola()
                 case 9:
+                    imprimir_mensaje(
+                        f"El jugador con  con la mayor cantidad de asistencias totales es: {mostrar_nombre_formateado(ordenar_lista(jugadores,False,'asistencias_totales','estadisticas')[0])}",
+                        "Info",
+                    )
                     limpiar_consola()
                 case 10:
                     limpiar_consola()
