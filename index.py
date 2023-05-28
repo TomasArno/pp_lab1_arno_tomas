@@ -74,7 +74,7 @@ def aplicacion_nba():
                     limpiar_consola()
                 case 9:
                     imprimir_mensaje(
-                        f"El jugador con  con la mayor cantidad de asistencias totales es: {mostrar_nombre_formateado(ordenar_lista(jugadores,False,'asistencias_totales','estadisticas')[0])}",
+                        f"El jugador con la mayor cantidad de asistencias totales es: {mostrar_nombre_formateado(ordenar_lista(jugadores,False,'asistencias_totales','estadisticas')[0])}",
                         "Info",
                     )
                     limpiar_consola()
@@ -82,6 +82,7 @@ def aplicacion_nba():
                     calcular_max_segun_valor(jugadores, "promedio_puntos_por_partido")
                     limpiar_consola()
                 case 11:
+                    calcular_max_segun_valor(jugadores, "promedio_rebotes_por_partido")
                     limpiar_consola()
                 case 12:
                     limpiar_consola()

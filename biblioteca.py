@@ -271,15 +271,15 @@ def calcular_max_segun_valor(jugadores: list[dict], key: str) -> None:
     return: None
     """
     valor_ingresado = input(
-        "Ingrese un valor numerico para ver todos los jugadores que promediaron más puntos por partido "
+        f"Ingrese un valor numerico para ver todos los jugadores que superan ese valor en su estadística {key.replace('_', ' ')} "
     )
 
     if valor_ingresado.isnumeric():
         for jugador in jugadores:
             if int(valor_ingresado) < jugador["estadisticas"][key]:
                 imprimir_mensaje(
-                    f"{mostrar_nombre_formateado(jugador)} tiene mas promedio de puntos por partido que el valor ingresado",
-                    "Success",
+                    f"{mostrar_nombre_formateado(jugador)}",
+                    "Info",
                 )
     else:
         imprimir_mensaje("Ingrese un valor válido", "Error")
