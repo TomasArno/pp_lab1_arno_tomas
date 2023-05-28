@@ -209,33 +209,33 @@ def buscar_mostrar_logros(jugadores: list[dict]) -> list[dict]:
         return -1
 
 
-def calcula_promedio_puntos_equipo(jugadores: list[dict]) -> None:
+def calcula_promedio_puntos_equipo(jugadores: list[dict]) -> list[dict]:
     """
-    Esta función calcula y muestra el promedio de puntos por partido de todo el equipo del Dream Team, ordenado por nombre de manera ascendente.
+    Esta función calcula el promedio de puntos por partido de los jugadores indicados
 
     :param jugadores: Lista de diccionarios que contiene los datos de todos los jugadores.
+    Return: Lista de diccionarios que contiene los datos de todos los jugadores
     """
     acumulador_puntos = 0
     contador_jugadores = 0
     jugadores_validados = []
+    if jugadores:
+        for jugador in jugadores:
+            if jugador:
+                acumulador_puntos += jugador["estadisticas"][
+                    "promedio_puntos_por_partido"
+                ]
+                contador_jugadores += 1
+                jugadores_validados.append(jugador)
 
-    for jugador in jugadores:
-        if jugador:
-            acumulador_puntos += jugador["estadisticas"]["promedio_puntos_por_partido"]
-            contador_jugadores += 1
-            jugadores_validados.append(jugador)
-    jugadores_ordenados = ordenar_lista(jugadores_validados, True, "nombre")
-
-    imprimir_mensaje(
-        f"El promedio de puntos total del equipo es de: {int(acumulador_puntos / contador_jugadores)}",
-        "Success",
-    )
-
-    for jugador_ordenado in jugadores_ordenados:
         imprimir_mensaje(
-            f"{jugador_ordenado['nombre']}: promedio puntos por partido -> {jugador_ordenado['estadisticas']['promedio_puntos_por_partido']}",
-            "Info",
+            f"El promedio de puntos total del equipo es de: {int(acumulador_puntos / contador_jugadores)}",
+            "Success",
         )
+        return jugadores_validados
+
+    else:
+        imprimir_mensaje("Elemento vacío", "Error")
 
 
 def pertenece_salon_fama(jugadores: list[dict]) -> None:
@@ -279,7 +279,7 @@ def calcular_max_segun_valor(jugadores: list[dict], key: str) -> None:
             if int(valor_ingresado) < jugador["estadisticas"][key]:
                 imprimir_mensaje(
                     f"{mostrar_nombre_formateado(jugador)}",
-                    "Info",
+                    "Success",
                 )
     else:
         imprimir_mensaje("Ingrese un valor válido", "Error")
