@@ -51,30 +51,60 @@ def validador(patron: str, opcion_evaluar: str) -> bool:
         return False
 
 
-def ordenar_lista(lista, orden: bool) -> list:
-    flag_swap = True
-    while flag_swap:
-        flag_swap = False
-        for rango_a in range(len(lista) - 1):
-            if (
-                orden
-                and lista[rango_a] > lista[rango_a + 1]
-                or not orden
-                and lista[rango_a] < lista[rango_a + 1]
-            ):
-                lista[rango_a], lista[rango_a + 1] = (
-                    lista[rango_a + 1],
-                    lista[rango_a],
-                )
-                flag_swap = True
+def ordenar_lista(
+    jugadores: list[dict], orden: bool, atributo: str, estadisticas: str = None
+) -> list[dict]:
+    """
+    Esta funcion ordena de manera Ascendente o Descendente una lista de jugadores
+    :param jugadores: Lista de diccionarios que contiene los datos de todos los jugadores
+    :param orden: Boolean que indica el modo de ordenamiento (True asc - False desc)
+    :param atributo: string que representa la key a iterar
+    :param estadisticas: string opcional que representa una key que solo se va a usar en caso que se quiera iterar las estadisticas
+    return: lista de diccionarios que contiene los jugadores ordenados según el criterio indicado
+    """
 
-    return lista
+    lista_jugadores = jugadores[:]
+    if lista_jugadores:
+        flag_swap = True
+        while flag_swap:
+            flag_swap = False
+            for rango_a in range(len(lista_jugadores) - 1):
+                if (
+                    orden
+                    and estadisticas
+                    and lista_jugadores[rango_a][estadisticas][atributo]
+                    > lista_jugadores[rango_a + 1][estadisticas][atributo]
+                    or not orden
+                    and estadisticas
+                    and lista_jugadores[rango_a][estadisticas][atributo]
+                    < lista_jugadores[rango_a + 1][estadisticas][atributo]
+                ) or (
+                    orden
+                    and not estadisticas
+                    and lista_jugadores[rango_a][atributo]
+                    > lista_jugadores[rango_a + 1][atributo]
+                    or not orden
+                    and not estadisticas
+                    and lista_jugadores[rango_a][atributo]
+                    < lista_jugadores[rango_a + 1][atributo]
+                ):
+                    lista_jugadores[rango_a], lista_jugadores[rango_a + 1] = (
+                        lista_jugadores[rango_a + 1],
+                        lista_jugadores[rango_a],
+                    )
+                    flag_swap = True
+
+        return lista_jugadores
+    else:
+        imprimir_mensaje("Elemento vacío", "Error")
 
 
 def leer_json(nombre_archivo: str) -> list[dict]:
     """
     Esta función lee el archivo JSON indicado por parámetro y devuelve el contenido de la key "jugadores"
     parseado como una lista de diccionarios
+    :param nombre_archivo: String que representa el nombre del archivo a guardar/sobreescribir
+    return: lista de diccionarios que contiene la data de todos los jugadores
     """
     with open(nombre_archivo) as archivo:
         return list[dict](json.load(archivo)["jugadores"])
@@ -110,12 +140,12 @@ def guardar_csv(nombre_archivo: str, data: dict) -> None:
             imprimir_mensaje("La data a guardar no debe ser vacía", "Error")
 
 
-def mostrar_nombre_formateado(jugador: dict):
+def mostrar_nombre_formateado(jugador: dict) -> str:
     """
-    Esta función imprime el nombre del jugador formateado
+    Esta función genera un string con el nombre del jugador indicado junto a su posición
 
     :param jugador: diccionario que contiene los datos de un jugador
-    return: None
+    return: String que representa el nombre del jugador formateado con su posicion
     """
     if jugador:
         return f'{jugador["nombre"]} - {jugador["posicion"]}'
@@ -193,17 +223,17 @@ def calcula_promedio_puntos_equipo(jugadores: list[dict]) -> None:
         if jugador:
             acumulador_puntos += jugador["estadisticas"]["promedio_puntos_por_partido"]
             contador_jugadores += 1
-            jugadores_validados.append(jugador["nombre"])
-    jugadores_ordenados = ordenar_lista(jugadores_validados, True)
+            jugadores_validados.append(jugador)
+    jugadores_ordenados = ordenar_lista(jugadores_validados, True, "nombre")
 
     imprimir_mensaje(
         f"El promedio de puntos total del equipo es de: {int(acumulador_puntos / contador_jugadores)}",
         "Success",
     )
 
-    for nombre_jugador in jugadores_ordenados:
+    for jugador_ordenado in jugadores_ordenados:
         imprimir_mensaje(
-            f"{nombre_jugador}: promedio puntos por partido -> {jugador['estadisticas']['promedio_puntos_por_partido']}",
+            f"{jugador_ordenado['nombre']}: promedio puntos por partido -> {jugador_ordenado['estadisticas']['promedio_puntos_por_partido']}",
             "Info",
         )
 

@@ -9,6 +9,7 @@ from biblioteca import (
     buscar_mostrar_logros,
     calcula_promedio_puntos_equipo,
     pertenece_salon_fama,
+    ordenar_lista,
 )
 
 jugadores = leer_json("./dt.json")
@@ -18,7 +19,7 @@ def aplicacion_nba():
     ingresos = []
     while True:
         opcion = input("Elija la opción deseada (0-20): ")
-        if validador(r"^[0-9]{1,2}$", opcion) and int(opcion) <= len(jugadores):
+        if validador(r"^[0-9]{1,2}$", opcion):
             opcion = int(opcion)
             ingresos.append(opcion)
             match opcion:
@@ -59,6 +60,10 @@ def aplicacion_nba():
                     pertenece_salon_fama(jugadores)
                     limpiar_consola()
                 case 7:
+                    imprimir_mensaje(
+                        f"El jugador con mas cantidad de puntos totales es: {mostrar_nombre_formateado(ordenar_lista(jugadores,True,'puntos_totales','estadisticas')[0])}",
+                        "Info",
+                    )
                     limpiar_consola()
                 case 8:
                     limpiar_consola()
