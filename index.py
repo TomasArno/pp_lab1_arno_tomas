@@ -10,6 +10,7 @@ from biblioteca import (
     calcula_promedio_puntos_equipo,
     pertenece_salon_fama,
     ordenar_lista,
+    calcular_max_segun_valor,
 )
 
 jugadores = leer_json("./dt.json")
@@ -78,6 +79,7 @@ def aplicacion_nba():
                     )
                     limpiar_consola()
                 case 10:
+                    calcular_max_segun_valor(jugadores, "promedio_puntos_por_partido")
                     limpiar_consola()
                 case 11:
                     limpiar_consola()
