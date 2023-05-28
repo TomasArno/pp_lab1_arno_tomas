@@ -90,6 +90,10 @@ def aplicacion_nba():
                     )
                     limpiar_consola()
                 case 13:
+                    imprimir_mensaje(
+                        f"El jugador con la mayor cantidad de robos totales es: {mostrar_nombre_formateado(ordenar_lista(jugadores,False,'robos_totales','estadisticas')[0])}",
+                        "Info",
+                    )
                     limpiar_consola()
                 case 14:
                     limpiar_consola()
