@@ -135,8 +135,16 @@ def aplicacion_nba():
                     calcular_max_segun_valor(jugadores, "porcentaje_tiros_triples")
                     limpiar_consola()
                 case 19:
+                    imprimir_mensaje(
+                        f"El jugador con la mayor cantidad de temporadas jugadas es: {mostrar_nombre_formateado(ordenar_lista(jugadores,False,'temporadas',{})[0])}",
+                        "Info",
+                    )
                     limpiar_consola()
                 case 20:
+                    calcular_max_segun_valor(
+                        ordenar_lista(jugadores, True, "posicion", ""),
+                        "porcentaje_tiros_de_campo",
+                    )
                     limpiar_consola()
         else:
             imprimir_mensaje("Opción inválida", "Error")
