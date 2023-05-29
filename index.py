@@ -20,7 +20,7 @@ def aplicacion_nba():
     ingresos = []
     while True:
         opcion = input("Elija la opción deseada (0-20): ")
-        if validador(r"^[0-9]{1,2}$", opcion):
+        if validador(r"^[0-9]{1,2}$", opcion) and int(opcion) <= 20:
             opcion = int(opcion)
             ingresos.append(opcion)
             match opcion:
@@ -36,16 +36,12 @@ def aplicacion_nba():
                 case 3:
                     if 2 in ingresos:
                         guardar_csv("data.csv", estadisticas_jugador)
-                        imprimir_mensaje(
-                            "Archivo 'data.csv' guardado satisfactoriamente!",
-                            "Success",
-                        )
                     else:
                         imprimir_mensaje(
                             "Por favor, primero solicite las estadisticas de algún jugador",
                             "Error",
                         )
-                        limpiar_consola()
+                    limpiar_consola()
                 case 4:
                     jugador_buscado = buscar_mostrar_logros(jugadores)
                     if jugador_buscado != -1:

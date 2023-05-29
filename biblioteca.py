@@ -51,41 +51,6 @@ def validador(patron: str, opcion_evaluar: str) -> bool:
         return False
 
 
-def ordenar_lista(lista: list, orden: bool, key: str) -> list:
-    """
-    Esta funcion ordena de manera Ascendente o Descendente una lista de jugadores
-    :param jugadores: Lista de diccionarios que contiene los datos de todos los jugadores
-    :param orden: Boolean que indica el modo de ordenamiento (True asc - False desc)
-    :param atributo: string que representa la key a iterar
-    :param estadisticas: string opcional que representa una key que solo se va a usar en caso que se quiera iterar las estadisticas
-    return: lista de diccionarios que contiene los jugadores ordenados según el criterio indicado
-    """
-
-    # lista_jugadores = lista[:]
-    # if lista_jugadores:
-    #     flag_swap = True
-    #     while flag_swap:
-    #         flag_swap = False
-    #         for rango_a in range(len(lista_jugadores) - 1):
-    #             if (
-    #                 orden
-    #                 and lista_jugadores[rango_a][key]
-    #                 > lista_jugadores[rango_a + 1][key]
-    #                 or not orden
-    #                 and lista_jugadores[rango_a][key]
-    #                 < lista_jugadores[rango_a + 1][key]
-    #             ):
-    #                 lista_jugadores[rango_a], lista_jugadores[rango_a + 1] = (
-    #                     lista_jugadores[rango_a + 1],
-    #                     lista_jugadores[rango_a],
-    #                 )
-    #                 flag_swap = True
-
-    #     return lista_jugadores
-    # else:
-    #     imprimir_mensaje("Elemento vacío", "Error")
-
-
 def ordenar_lista(
     jugadores: list[dict], orden: bool, atributo: str, estadisticas: list | dict | str
 ) -> list[dict]:
@@ -164,10 +129,11 @@ def guardar_csv(nombre_archivo: str, data: dict) -> None:
     Esta función guarda en un archivo .CSV la data recibida por parámetro, si el archivo no existe lo creará.
 
     :param nombre_archivo: String que representa el nombre del archivo a guardar|crear
-    :param data: Dict que contiene la información a guardar
+    :param data: Diccionario que contiene la información a guardar
+    return None
     """
-    with open(nombre_archivo, "w") as archivo:
-        if data:
+    if data:
+        with open(nombre_archivo, "w") as archivo:
             data_jugadores = []
             campos = []
             data_jugador = []
@@ -177,16 +143,17 @@ def guardar_csv(nombre_archivo: str, data: dict) -> None:
                         for value in data[elemento]:
                             campos.append(str(value))
                             data_jugador.append(str(data[elemento][value]))
-                    elif type(data[elemento]) != list:
-                        campos.append(str(elemento))
-                        data_jugador.append(str(data[elemento]))
 
             data_jugadores.append(", ".join(campos))
             data_jugadores.append(", ".join(data_jugador))
 
             archivo.write("\n".join(data_jugadores))
-        else:
-            imprimir_mensaje("La data a guardar no debe ser vacía", "Error")
+            imprimir_mensaje(
+                f"Archivo {nombre_archivo} guardado satisfactoriamente!",
+                "Success",
+            )
+    else:
+        imprimir_mensaje("La data a guardar no debe ser vacía", "Error")
 
 
 def mostrar_nombre_formateado(jugador: dict) -> str:
@@ -218,9 +185,9 @@ def mostrar_estadisticas_jugador(jugadores: list[dict]) -> dict:
     indice = input("Ingrese el indice del jugador a buscar: ")
     validado = validador(r"^[0-9]{1,2}$", indice)
 
-    if validado and int(indice) <= len(jugadores):
+    if validado and int(indice) <= len(jugadores) - 1:
         indice = int(indice)
-        imprimir_mensaje(f"#{contador} | {jugadores[indice]['nombre']}:", "Success")
+        imprimir_mensaje(f"#{indice} | {jugadores[indice]['nombre']}:", "Success")
 
         for key in jugadores[indice]["estadisticas"]:
             imprimir_mensaje(
