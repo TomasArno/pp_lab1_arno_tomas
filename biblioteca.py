@@ -335,7 +335,13 @@ def guardar_csv_bonus(nombre_archivo: str, data: dict) -> None:
         imprimir_mensaje("La data a guardar no debe ser vacía", "Error")
 
 
-def bonus(jugadores: list[dict]):
+def bonus(jugadores: list[dict]) -> None:
+    """
+    Esta función guarda en un .csv el ranking de posiciones por jugador en sus estadisticas: Puntos, Rebotes, Asistencias y Robos.
+
+    :param jugadores: Lista de diccionarios que contiene los datos de todos los jugadores.
+    Return: None
+    """
     dict_final = {
         "jugador": [],
         "puntos": [],
@@ -370,4 +376,18 @@ def bonus(jugadores: list[dict]):
 
     guardar_csv_bonus("data.csv", dict_final)
 
-
+def jugadores_cantidad_posicion(jugadores: list[dict]) -> None:
+    """
+    Esta función muestra la cantidad de jugadores que hay por posicion.
+    
+    :param jugadores: Lista de diccionarios que contiene los datos de todos los jugadores.
+    Return:None
+    """
+    posiciones = {}
+    for jugador in jugadores:
+        if jugador["posicion"] in posiciones:
+            posiciones[jugador["posicion"]] += 1
+        else:
+            posiciones[jugador["posicion"]] = 1
+    for posicion in posiciones.keys():
+        imprimir_mensaje(f"{posicion}: {posiciones[posicion]}", "Info")
