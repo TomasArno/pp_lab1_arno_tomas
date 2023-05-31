@@ -52,7 +52,10 @@ def validador(patron: str, opcion_evaluar: str) -> bool:
 
 
 def ordenar_lista(
-    jugadores: list[dict], orden: bool, atributo: str, estadisticas: list | dict | str
+    lista_jugadores: list[dict],
+    orden: bool,
+    atributo: str,
+    estadisticas: list | dict | str,
 ) -> list[dict]:
     """
     Esta funcion ordena de manera Ascendente o Descendente los datos deseados de la lista de jugadores
@@ -64,7 +67,7 @@ def ordenar_lista(
     return: lista de diccionarios que contiene los jugadores ordenados según el criterio indicado
     """
 
-    lista_jugadores = jugadores[:]
+    # lista_jugadores = jugadores[:]
     if lista_jugadores:
         flag_swap = True
         while flag_swap:
@@ -299,3 +302,72 @@ def calcular_max_segun_valor(jugadores: list[dict], key: str) -> None:
                 )
     else:
         imprimir_mensaje("Ingrese un valor válido", "Error")
+
+
+def guardar_csv_bonus(nombre_archivo: str, data: dict) -> None:
+    """
+    Esta función guarda en un archivo .CSV la data recibida por parámetro, si el archivo no existe lo creará.
+
+    :param nombre_archivo: String que representa el nombre del archivo a guardar|crear
+    :param data: Diccionario que contiene la información a guardar
+    return None
+    """
+    if data:
+        with open(nombre_archivo, "w") as archivo:
+            data_jugadores = []
+            campos = []
+            for elemento in data:  # jugador | robos
+                if elemento:
+                    campos.append(str(elemento))
+            data_jugadores.append(", ".join(campos))
+            for index in range(len(data["jugador"])):
+                data_jugador = []
+                for elemento in data:
+                    data_jugador.append(str(data[elemento][index]))
+                data_jugadores.append(", ".join(data_jugador))
+
+            archivo.write("\n".join(data_jugadores))
+            imprimir_mensaje(
+                f"Archivo {nombre_archivo} guardado satisfactoriamente!",
+                "Success",
+            )
+    else:
+        imprimir_mensaje("La data a guardar no debe ser vacía", "Error")
+
+
+def bonus(jugadores: list[dict]):
+    dict_final = {
+        "jugador": [],
+        "puntos": [],
+        "rebotes": [],
+        "asistencias": [],
+        "robos": [],
+    }
+    lista_jugadores_puntos = ordenar_lista(jugadores, False, "puntos_totales", {})
+    lista_jugadores_rebotes = ordenar_lista(jugadores, False, "rebotes_totales", {})
+    lista_jugadores_asistencias = ordenar_lista(
+        jugadores, False, "asistencias_totales", {}
+    )
+    lista_jugadores_robos = ordenar_lista(jugadores, False, "robos_totales", {})
+    lista_nombres_puntos = []
+    lista_nombres_rebotes = []
+    lista_nombres_asistencias = []
+    lista_nombres_robos = []
+    for index in range(len(jugadores)):
+        lista_nombres_puntos.append(lista_jugadores_puntos[index]["nombre"])
+        lista_nombres_rebotes.append(lista_jugadores_rebotes[index]["nombre"])
+        lista_nombres_asistencias.append(lista_jugadores_asistencias[index]["nombre"])
+        lista_nombres_robos.append(lista_jugadores_robos[index]["nombre"])
+
+    for jugador in jugadores:
+        dict_final["jugador"].append(jugador["nombre"])
+        dict_final["puntos"].append(lista_nombres_puntos.index(jugador["nombre"]) + 1)
+        dict_final["rebotes"].append(lista_nombres_rebotes.index(jugador["nombre"]) + 1)
+        dict_final["asistencias"].append(
+            lista_nombres_asistencias.index(jugador["nombre"]) + 1
+        )
+        dict_final["robos"].append(lista_nombres_robos.index(jugador["nombre"]) + 1)
+
+    guardar_csv_bonus("data.csv", dict_final)
+
+

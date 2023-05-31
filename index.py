@@ -11,6 +11,7 @@ from biblioteca import (
     pertenece_salon_fama,
     ordenar_lista,
     calcular_max_segun_valor,
+    bonus,
 )
 
 jugadores = leer_json("./dt.json")
@@ -20,7 +21,7 @@ def aplicacion_nba():
     ingresos = []
     while True:
         opcion = input("Elija la opción deseada (0-20): ")
-        if validador(r"^[0-9]{1,2}$", opcion) and int(opcion) <= 20:
+        if validador(r"^[0-9]{1,2}$", opcion) and int(opcion) <= 21:
             opcion = int(opcion)
             ingresos.append(opcion)
             match opcion:
@@ -141,6 +142,9 @@ def aplicacion_nba():
                         ordenar_lista(jugadores, True, "posicion", ""),
                         "porcentaje_tiros_de_campo",
                     )
+                    limpiar_consola()
+                case 21:
+                    bonus(jugadores)
                     limpiar_consola()
         else:
             imprimir_mensaje("Opción inválida", "Error")
